@@ -35,9 +35,7 @@ Tweet:
 #  - Wo die Instruktion endet
 #  - Wo der zu analysierende Text beginnt
 
-def conversation_loop():
-    client = OllamaService.OllamaClient(system_prompt)
-
+def conversation_loop(client) -> list:
     messages = []
     while True:
         user_message = input('Your input: ')
@@ -57,23 +55,23 @@ if __name__ == "__main__":
     m_positive = "excited for fri,not so i can get smashed but so i can go to the garden centre,look at the xmas display and have a coffee #wtf #grannyalert"
     m_negative = "@anthonyli You're not coming here The week of feb 16th are you? I'll be in oklahoma so I don't want to miss you guys :("
     #------------------------- Olama -------------------------
-    #client = OllamaService.OllamaClient(system_prompt)
-    #response = client.query("Was läuft hüt abig?")
-    #print(response)
-    #print(conversation_loop())
-    # client = OllamaService.OllamaClient(system_prompt_tweet)
-    # response = client.query(m_neutral)
-    # print(response)
-    # response = client.query(m_positive)
-    # print(response)
-    # response = client.query(m_negative)
-    # print(response)
-    #------------------------- Antropic -------------------------
-    client = AnthropicService.AnthropicClient(system_prompt)
+    # client = OllamaService.OllamaClient(system_prompt)
     # response = client.query("Was läuft hüt abig?")
     # print(response)
-    print(conversation_loop())
-    # client = OllamaService.OllamaClient(system_prompt_tweet)
+    # print(conversation_loop(client))
+    client = OllamaService.OllamaClient(system_prompt_tweet)
+    response = client.query(m_neutral)
+    print(response)
+    response = client.query(m_positive)
+    print(response)
+    response = client.query(m_negative)
+    print(response)
+    #------------------------- Antropic -------------------------
+    # client = AnthropicService.AnthropicClient(system_prompt)
+    # response = client.query("Was läuft hüt abig?")
+    # print(response)
+    # print(conversation_loop(client))
+    # client = AnthropicService.AnthropicClient(system_prompt_tweet)
     # response = client.query(m_neutral)
     # print(response)
     # response = client.query(m_positive)

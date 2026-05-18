@@ -1,11 +1,13 @@
 #!/usr/bin/python
 import os
+from urllib import response
 
 from anthropic import Anthropic
+from matplotlib.pylab import block
 from openai import api_key
 
 import IQueryLLM as Illm
-from LLM_query import chat_anthropic, get_client
+from anthropic.types import TextBlock
 
 class AnthropicClient(Illm.IQueryLLM):
     def get_client(self) -> Anthropic:
@@ -32,20 +34,23 @@ class AnthropicClient(Illm.IQueryLLM):
             system=self._system_prompt,
             messages=messages
         )
-        return answer.content[0].text
+        block = answer.content[0]
+        if isinstance(block, TextBlock):
+            result = block.text
+        else:
+            raise RuntimeError(f"Unerwarteter Block-Typ: {type(block).__name__}")
+        return result
     
     def query_conversation(self, messages: list) -> str:
-        llm_client = get_client()
-        messages = []
-        while True:
-            user_message = input('Your input: ')
-
-            if user_message.lower() in {'q', 'exit', 'halt', 'quit'}:
-                break
-
-            messages.append({"role": "user", "content": user_message})
-
-            answer = chat_anthropic(llm_client, messages, self._system_prompt)
-            print(answer)
-            messages.append({"role": "assistant", "content": answer})
-        return messages
+        answer = self._LLM_client.messages.create(
+            model="claude-opus-4-7",
+            max_tokens=1024,
+            system=self._system_prompt,
+            messages=messages
+        )  
+        block = answer.content[0]
+        if isinstance(block, TextBlock):
+            result = block.text
+        else:
+            raise RuntimeError(f"Unerwarteter Block-Typ: {type(block).__name__}")
+        return result
