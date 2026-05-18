@@ -25,14 +25,11 @@ class AnthropicClient(Illm.IQueryLLM):
         return self._system_prompt
 
     def query(self, text: str) -> str:
-        messages = [
-            {"role": "user", "content": text}
-        ]
         answer = self._LLM_client.messages.create(
             model="claude-opus-4-7",
             max_tokens=1024,
             system=self._system_prompt,
-            messages=messages
+            messages=[{"role": "user", "content": text}]
         )
         block = answer.content[0]
         if isinstance(block, TextBlock):
